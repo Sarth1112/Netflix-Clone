@@ -1,33 +1,47 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import './TitleCards.css'
 import cards_data from '../../assets/cards/Cards_data'
 
 
-const TitleCards = () => {
+const TitleCards = ({title, category}) => {
+  const [apiData, setApiData] = useState([]);
   const cardsRef = useRef();
 
+  const options = {
+    method: 'GET',
+    headers: {
+      accept: 'application/json',
+      Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiI5YjkxMGM1NTFiZjBkZDhhNjQyNTkyN2JhZmM1NmJjNCIsInN1YiI6IjY2Njg2MTA5NTViOTAxOTVmMWMyYWNmZSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.8w7i7ueH3gxKg4ajiKmMNC64DGc34E8ubHmnnGZiE7o'
+    }
+  };
+  
+  
   const handlewheel = (event)=>{
     event.preventDefault;
     cardsRef.current.scrollLeft += event.deltaY;
   }
 
   useEffect(() => {
+    fetch('https://api.themoviedb.org/3/movie/now_playing?language=en-US&page=1', options)
+    .then(response => response.json())
+    .then(response => setApiData(response.results))
+    .catch(err => console.error(err));
     const currentRef = cardsRef.current;
     currentRef.addEventListener('wheel', handlewheel);
 
-    // Cleanup event listener on component unmount
+    
     return () => {
       currentRef.removeEventListener('wheel', handlewheel);
     };
   }, []);
   return (
     <div className='titlecards' >
-        <h2>Popular on Netflix</h2>
+        <h2>{title?title:"Popular on Netflix"}</h2>
         <div className="card-list" ref={cardsRef}>
-          {cards_data.map((card,index)=> {
+          {apiData.map((card,index)=> {
             return <div className="card" key={index}>
-              <img src={card.image} alt="" />
-              <p>{card.name}</p>
+              <img src={`https://image.tmdb.org/t/p/w500`+card.backdrop_path} alt="" />
+              <p>{card.original_title}</p>
             </div>
           })}
         </div>
