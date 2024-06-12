@@ -1,12 +1,10 @@
 import { initializeApp } from "firebase/app";
 import { createUserWithEmailAndPassword, getAuth, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { addDoc, collection, getFirestore } from "firebase/firestore";
-
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { toast } from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 // Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
 const firebaseConfig = {
   apiKey: "AIzaSyC92NuPU9lVdeOg8SPthHsYy1v2NZDbQhw",
   authDomain: "netflix-clone-f2348.firebaseapp.com",
@@ -22,6 +20,10 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
+const formatErrorMessage = (message) => {
+    return message.split('/')[1].split(').')[0].split('-').join(' ');
+  };
+
 const signup = async (name, email, password) => {
   try {
     const res = await createUserWithEmailAndPassword(auth, email, password);
@@ -34,7 +36,7 @@ const signup = async (name, email, password) => {
     });
   } catch (error) {
     console.error(error);
-    alert(error.message);
+    toast.error(formatErrorMessage(error.message)); // Ensure error.message is passed
   }
 }
 
@@ -43,7 +45,7 @@ const login = async (email, password) => {
     await signInWithEmailAndPassword(auth, email, password);
   } catch (error) {
     console.error(error);
-    alert(error.message);
+    toast.error(formatErrorMessage(error.message)); // Ensure error.message is passed
   }
 }
 
@@ -52,7 +54,7 @@ const logout = async () => {
     await signOut(auth);
   } catch (error) {
     console.error(error);
-    alert(error.message);
+    toast.error(error.message); // Ensure error.message is passed
   }
 }
 
