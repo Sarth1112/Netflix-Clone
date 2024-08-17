@@ -1,10 +1,12 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import './Login.css'
 import logo from '../../assets/logo.png'
 import { login, signup } from '../../firebase'
 import netflix_spinner from '../../assets/netflix_spinner.gif'
-const Login = () => {
 
+const Login = () => {
+  const navigate = useNavigate()
   const [signState, setSignState] = useState("Sign In")
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -21,34 +23,46 @@ const Login = () => {
     }
     setLoading(false);
   }
+
+  const redirectToHome = () => {
+    navigate('/')
+  }
+
   return (
-    loading?<div className="login-spinner">
-      <img src={netflix_spinner} alt="" />
-    </div>:
-    <div className='login'> 
-      <img src={logo} className='login-logo' alt="" />
-      <div className="login-form">
-        <h1>{signState}</h1>
-        <form>
-          {signState==="Sign Up"?<input value={name} onChange={(e) => {setName(e.target.value)}}type="text" placeholder='Your name' />:<></>}
-          <input value={email} onChange={(e) => {setEmail(e.target.value)}}type="email" placeholder='Email' />
-          <input value={password} onChange={(e) => {setPassword(e.target.value)}}type="password" placeholder='Password' />
-          <button onClick={user_auth} type='submit'>{signState}</button>
-          <div className="form-help">
-            <div className="remember">
-              <input type="checkbox" />
-              <label htmlFor="">Remeber Me</label>
+    loading ? (
+      <div className="login-spinner">
+        <img src={netflix_spinner} alt="" />
+      </div>
+    ) : (
+      <div className='login'> 
+        <img src={logo} className='login-logo' alt="" />
+        <div className="login-form">
+          <h1>{signState}</h1>
+          <form>
+            {signState==="Sign Up" && <input value={name} onChange={(e) => {setName(e.target.value)}} type="text" placeholder='Your name' />}
+            <input value={email} onChange={(e) => {setEmail(e.target.value)}} type="email" placeholder='Email' />
+            <input value={password} onChange={(e) => {setPassword(e.target.value)}} type="password" placeholder='Password' />
+            <button onClick={user_auth} type='submit'>{signState}</button>
+            <div className="form-help">
+              <div className="remember">
+                <input type="checkbox" />
+                <label htmlFor="">Remember Me</label>
+              </div>
+              <p>Need help?</p>
             </div>
-            <p>Need help?</p>
+          </form>
+          <div className="form-switch">
+            {signState==="Sign In"
+              ? <p>New to Netflix? <span onClick={()=>{setSignState("Sign Up")}}>Sign up Now</span></p>
+              : <p>Already have an account? <span onClick={()=>{setSignState("Sign In")}}>Sign In Now</span></p>
+            }
           </div>
-        </form>
-        <div className="form-switch">
-          {signState==="Sign In"? <p>New to Netflix? <span onClick={()=>{setSignState("Sign Up")}}>Sign up Now</span></p>: <p>Already have an account? <span onClick={()=>{setSignState("Sign In")}}>Sign In Now</span></p>}
-          
-          
+          <div className="home-redirect">
+            <button onClick={redirectToHome}>Continue to Home without {signState}</button>
+          </div>
         </div>
       </div>
-    </div>
+    )
   )
 }
 
