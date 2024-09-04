@@ -1,6 +1,6 @@
 # Netflix-Clone
 
-
+https://net-flixclone-0abe9e1.netlify.app/
  
 Created a Netflix clone using React and Firebase was a multifaceted project that required the integration of several technologies to deliver a seamless, responsive, and interactive user experience. The foundation of the project was built with React, a popular JavaScript library known for its efficiency in building user interfaces. React's component-based architecture allowed me to create reusable components for different parts of the website, such as the movie cards, navigation bar, and user authentication forms. For styling and responsiveness, I utilized CSS frameworks to ensure the site looks and performs well on various devices.
 
